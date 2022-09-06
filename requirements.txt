@@ -1,0 +1,11 @@
+transformers
+datasets
+torch
+datasets
+pandas
+numpy
+seaborn
+jupyterlab
+seqeval
+tqdm
+pickle
