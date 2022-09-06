@@ -8,4 +8,5 @@ seaborn
 jupyterlab
 seqeval
 tqdm
-pickle
+huggingface_hub
+ipywidgets
