@@ -41,3 +41,7 @@ jupyter nbconvert --ExecutePreprocessor.timeout=-1 --to notebook --inplace --exe
 ## Datasets:
 
 - Wikiann: https://huggingface.co/datasets/wikiann
+
+## Other:
+
+- Add special Tokens: https://github.com/huggingface/transformers/issues/5232
