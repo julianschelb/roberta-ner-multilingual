@@ -44,4 +44,4 @@ jupyter nbconvert --ExecutePreprocessor.timeout=-1 --to notebook --inplace --exe
 
 ## Other:
 
-- Add special Tokens: https://github.com/huggingface/transformers/issues/5232
+- Add special Tokens: https://github.com/huggingface/transformers/issues/5232, https://github.com/huggingface/tokenizers/issues/247
