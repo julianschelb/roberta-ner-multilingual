@@ -48,8 +48,8 @@ tokenizer = AutoTokenizer.from_pretrained(f"{model_name}", add_prefix_space=True
 
 
 # Specify list of languages
-languages = ["en","de", "fr", "es", "zh"]
-languages = ["en", "de"]
+languages = ["en","de", "fr", "ne", "zh"]
+#languages = ["en", "de"]
 #languages = ["en"]
 dataset_name = "wikiann"
 

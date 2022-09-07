@@ -69,7 +69,7 @@ label_list = dataset["train"].features[f"ner_tags"].feature.names
 
 model_name = "xlm-roberta-large" #"bert-base-multilingual-cased" #xlm-roberta-large
 tokenizer = AutoTokenizer.from_pretrained(f"{model_name}", add_prefix_space=True) #AutoTokenizer(use_fast = True)
-model = AutoModelForTokenClassification.from_pretrained(f"{model_name}", num_labels=len(label_list))
+model = AutoModelForTokenClassification.from_pretrained(f"{model_name}", num_labels=len(label_list)).cuda()
 
 
 # ## Define Data Collator
@@ -217,15 +217,15 @@ training_args = TrainingArguments(
     logging_strategy = "steps",
     logging_steps = 2000,
     learning_rate=2e-5,
-    #auto_find_batch_size = True,
-    per_device_train_batch_size=1,
-    per_device_eval_batch_size=1,
-    gradient_accumulation_steps=4,
+    auto_find_batch_size = True,
+    #per_device_train_batch_size=1,
+    #per_device_eval_batch_size=1,
+    #gradient_accumulation_steps=4,
     #optim="adamw_torch",
-    num_train_epochs=5,
+    num_train_epochs=3,
     weight_decay=0.01,
     report_to="none",
-    #fp16=True,
+    fp16=True,
 )
 
 trainer = Trainer(
@@ -247,7 +247,7 @@ trainer = Trainer(
 # In[17]:
 
 
-get_ipython().system('nvidia-smi')
+#get_ipython().system('nvidia-smi')
 
 
 # In[18]:
