@@ -113,23 +113,26 @@ dataset
 # In[10]:
 
 
-#from transformers.optimization import Adafactor, AdafactorSchedule
+from transformers.optimization import AdamW, get_linear_schedule_with_warmup
 
-#optimizer = Adafactor(    
-#        model.parameters(),
-#        lr=1e-3,
-#        eps=(1e-30, 1e-3),
-#        clip_threshold=1.0,
-#        decay_rate=-0.8,
-#        beta1=None,
-#        weight_decay=0.0,
-#        relative_step=False,
-#        scale_parameter=False,
-#        warmup_init=False,
-#    )
+num_epochs = 2
+batch_size = 4
 
-#lr_scheduler = AdafactorSchedule(optimizer)
+# A training step is one gradient update. In one step batch_size examples are processed.
+# An epoch consists of one full cycle through the training data. 
+# This is usually many steps. As an example, if you have 2,000 images and use
+# a batch size of 10 an epoch consists of:
+num_steps = (len(dataset["train"]) / batch_size) * num_epochs
 
+optimizer = AdamW(model.parameters(), lr=2e-5, eps=1e-6, weight_decay=0.01, no_deprecation_warning= True)
+
+scheduler = get_linear_schedule_with_warmup(
+    optimizer, 
+    num_warmup_steps=0, 
+    num_training_steps= num_steps 
+)
+
+print("Steps:", num_steps)
 
 # **Define Metrics:**
 # 
@@ -212,18 +215,18 @@ training_args = TrainingArguments(
     #save_steps = 2000,
     remove_unused_columns = True,
     evaluation_strategy="steps",
-    eval_steps = 2000,
+    eval_steps = 5000,
     #load_best_model_at_end=True,
     logging_strategy = "steps",
-    logging_steps = 2000,
-    learning_rate=2e-5,
-    auto_find_batch_size = True,
-    #per_device_train_batch_size=1,
-    #per_device_eval_batch_size=1,
+    logging_steps = 5000,
+    #learning_rate= 2e-5,
+    #auto_find_batch_size = True,
+    per_device_train_batch_size=batch_size,
+    per_device_eval_batch_size=batch_size,
     #gradient_accumulation_steps=4,
     #optim="adamw_torch",
-    num_train_epochs=3,
-    weight_decay=0.01,
+    num_train_epochs=num_epochs,
+    #weight_decay=0.01,
     report_to="none",
     fp16=True,
 )
@@ -232,10 +235,10 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=dataset["train"],
-    eval_dataset=dataset["validation"],
+    eval_dataset=dataset["test"],
     tokenizer=tokenizer,
     data_collator=data_collator,
-    #optimizers=(optimizer, lr_scheduler),
+    optimizers=(optimizer, scheduler),
     compute_metrics=compute_metrics
 )
 
