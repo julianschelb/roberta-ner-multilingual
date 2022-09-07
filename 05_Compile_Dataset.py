@@ -1,15 +1,20 @@
-# %% [markdown]
-# # Finetuning BLOOM for NER: Compile Corpus
+#!/usr/bin/env python
+# coding: utf-8
 
-# %% [markdown]
+# # Finetuning RoBERTa for NER: Compile Corpus
+
 # ***
 
-# %% [markdown]
 # ## Imports
 
-# %%
-from transformers import (BloomTokenizerFast,
-                          BloomForTokenClassification,
+# In[1]:
+
+
+from transformers import (BertTokenizerFast,
+                          RobertaTokenizerFast,
+                          AutoTokenizer,
+                          BertForTokenClassification,
+                          RobertaForTokenClassification,
                           DataCollatorForTokenClassification, 
                           AutoModelForTokenClassification, 
                           TrainingArguments, Trainer)
@@ -18,28 +23,33 @@ import pickle
 import torch
 import os
 
-# %% [markdown]
+
 # ## Load Tokenizer
 
-# %% [markdown]
-# The list of available Models can be found here: https://huggingface.co/docs/transformers/model_doc/bloom
+# **Load Model and Tokenizer:**
+# 
+# Information about model variants can be found here: https://huggingface.co/docs/transformers/model_doc/roberta
 
-# %%
-model_name = "bloom-560m"
-tokenizer = BloomTokenizerFast.from_pretrained(f"bigscience/{model_name}", add_prefix_space=True)
-#model = BloomForTokenClassification.from_pretrained(f"bigscience/{model_name}")
+# In[2]:
 
-# %% [markdown]
+
+model_name = "xlm-roberta-large" #"bert-base-multilingual-cased" #xlm-roberta-large
+tokenizer = AutoTokenizer.from_pretrained(f"{model_name}", add_prefix_space=True) #AutoTokenizer(use_fast = True)
+#model = AutoModelForTokenClassification.from_pretrained(f"{model_name}")
+
+
 # ## Download Dataset for Finetuning
 
-# %% [markdown]
 # See:
 # * Dataset on Huggingface: https://huggingface.co/datasets/wikiann
 # * Load Datasets: https://huggingface.co/docs/datasets/v2.4.0/en/package_reference/loading_methods
 
-# %%
+# In[3]:
+
+
 # Specify list of languages
 languages = ["en","de", "fr", "es", "zh"]
+languages = ["en", "de"]
 #languages = ["en"]
 dataset_name = "wikiann"
 
@@ -66,17 +76,22 @@ for language in languages:
     dataset_test_new = load_dataset(dataset_name, language,  split="test")
     dataset_test = concatenate_datasets([dataset_test, dataset_test_new])
 
-# %%
+
+# In[4]:
+
+
 dataset = DatasetDict({
     "train":dataset_train,
     "test":dataset_test, 
     "validation":dataset_valid
     })
 
-# %% [markdown]
+
 # **Limit Dataset Size for Testing:**
 
-# %%
+# In[5]:
+
+
 ## Sample a subset of datapoints
 #num_samples = 1000
 #sample_ids = list(range(0,num_samples))
@@ -88,44 +103,55 @@ dataset = DatasetDict({
 #
 #print("Training Examples:", len(dataset_train))
 
-# %% [markdown]
+
 # **Save combined Dataset:**
 
-# %%
+# In[6]:
+
+
 data_path = "./data/dataset_multilingual.pkl"
 with open(data_path, 'wb') as pickle_file:
     pickle.dump(obj = dataset, file=pickle_file)
 
-# %% [markdown]
+
 # ### About the Dataset:
 
-# %% [markdown]
 # **Splits:**
 
-# %%
+# In[7]:
+
+
 dataset
 
-# %% [markdown]
+
 # **Training Examples:**
 
-# %%
+# In[8]:
+
+
 print("Dataset Object Type:", type(dataset["train"]))
 print("Training Examples:", len(dataset["train"]))
 
-# %% [markdown]
+
 # **Sample Structure:**
 
-# %%
+# In[9]:
+
+
 dataset["train"][95]
 
-# %% [markdown]
+
 # **Class Labels:**
 
-# %%
+# In[10]:
+
+
 label_list = dataset["train"].features[f"ner_tags"].feature.names
 print(label_list)
 
-# %%
+
+# In[ ]:
+
 
 
 
