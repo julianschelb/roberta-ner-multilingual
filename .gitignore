@@ -1,6 +1,7 @@
 /results/
 /figures/
 nohup.out
+.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
