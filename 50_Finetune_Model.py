@@ -115,8 +115,8 @@ dataset
 
 from transformers.optimization import AdamW, get_linear_schedule_with_warmup
 
-num_epochs = 2
-batch_size = 4
+num_epochs = 4
+batch_size = 16
 
 # A training step is one gradient update. In one step batch_size examples are processed.
 # An epoch consists of one full cycle through the training data. 
@@ -211,14 +211,14 @@ dataset = dataset.remove_columns(["tokens", "ner_tags", "langs", "spans"])
 
 training_args = TrainingArguments(
     output_dir="./results",
-    save_strategy= "no",# "epoch",
-    #save_steps = 2000,
+    #save_strategy= "no"# "epoch",
+    save_steps = 100000,
     remove_unused_columns = True,
     evaluation_strategy="steps",
-    eval_steps = 5000,
+    eval_steps = 100000,
     #load_best_model_at_end=True,
     logging_strategy = "steps",
-    logging_steps = 5000,
+    logging_steps = 100000,
     #learning_rate= 2e-5,
     #auto_find_batch_size = True,
     per_device_train_batch_size=batch_size,

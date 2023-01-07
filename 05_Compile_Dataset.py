@@ -48,7 +48,15 @@ tokenizer = AutoTokenizer.from_pretrained(f"{model_name}", add_prefix_space=True
 
 
 # Specify list of languages
-languages = ["en","de", "fr", "ne", "zh"]
+#languages = ["en","de", "fr",
+#	     "zh", "it", "es",
+#	     "hi", "bn", "ar", # Hindi, Bengalish, Arabic
+#	     "ru", "uk", "pt",
+#	     "ur", "id", "ja", # Urdu
+#	     "ne", "nl", "tr",
+#             "ca", "bg", "zh-yue"]
+
+languages=["ace","af","als","am","an","ang","ar","arc","arz","as","ast","ay","az","ba","bar","bat-smg","be","be-x-old","bg","bh","bn","bo","br","bs","ca","cbk-zam","cdo","ce","ceb","ckb","co","crh","cs","csb","cv","cy","da","de","diq","dv","el","eml","en","eo","es","et","eu","ext","fa","fi","fiu-vro","fo","fr","frr","fur","fy","ga","gan","gd","gl","gn","gu","hak","he","hi","hr","hsb","hu","hy","ia","id","ig","ilo","io","is","it","ja","jbo","jv","ka","kk","km","kn","ko","ksh","ku","ky","la","lb","li","lij","lmo","ln","lt","lv","map-bms","mg","mhr","mi","min","mk","ml","mn","mr","ms","mt","mwl","my","mzn","nap","nds","ne","nl","nn","no","nov","oc","or","os","pa","pdc","pl","pms","pnb","ps","pt","qu","rm","ro","ru","rw","sa","sah","scn","sco","sd","sh","si","simple","sk","sl","so","sq","sr","su","sv","sw","szl","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vec","vep","vi","vls","vo","wa","war","wuu","xmf","yi","yo","zea","zh","zh-classical","zh-min-nan","zh-yue"]
 #languages = ["en", "de"]
 #languages = ["en"]
 dataset_name = "wikiann"
@@ -56,6 +64,7 @@ dataset_name = "wikiann"
 # Downloa first language
 dataset_train = load_dataset(dataset_name, languages[0],  split="train")
 dataset_valid = load_dataset(dataset_name, languages[0],  split="validation")
+#dataset_train = concatenate_datasets([dataset_valid, dataset_valid_new])
 dataset_test =  load_dataset(dataset_name, languages[0],  split="test")
 languages.pop(0)
 
@@ -70,6 +79,7 @@ for language in languages:
 
     # Combine validation splits
     dataset_valid_new = load_dataset(dataset_name, language,  split="validation")
+    # dataset_train = concatenate_datasets([dataset_train, dataset_valid_new])
     dataset_valid = concatenate_datasets([dataset_valid, dataset_valid_new])
     
     # Combine test splits
