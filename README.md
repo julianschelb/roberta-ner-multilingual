@@ -1,4 +1,4 @@
-# Finetune RoBERTA for NER
+# Finetune RoBERTa for NER
 
 Finetuning RoBERTa for multilingual Named-entity recognition.
 
