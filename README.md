@@ -47,7 +47,7 @@ See:
 
 ## Dataset:
 
-The complete WikiANN dataset includes training examples for 282 languages and was constructed from Wikipedia. Training examples are extracted in an automated manner, exploiting entities mentioned in Wikipedia articles, often are formatted as hy- perlinks to the source article. Provided NER tags are in the IOB2 format. Named entities are classified as location (LOC), person (PER), or organization (ORG). 
+The complete WikiANN dataset includes training examples for 282 languages and was constructed from Wikipedia. Training examples are extracted in an automated manner, exploiting entities mentioned in Wikipedia articles, often are formatted as hyperlinks to the source article. Provided NER tags are in the IOB2 format. Named entities are classified as location (LOC), person (PER), or organization (ORG). 
 
 See:
 
